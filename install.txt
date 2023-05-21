@@ -1,0 +1,7 @@
+To run the app, make sure you are in the /supervisionhack2/website/ads_detect/, execute the following in the terminal:
+
+python GigaKod_Catchem_All/phishing_verify/server.py
+
+Visit: http://127.0.0.1:8000/phish/ to test it as a user
+
+Or send POST requests to http://127.0.0.1:8000/detect/api to take advantage of the API

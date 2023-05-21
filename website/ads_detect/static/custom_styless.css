@@ -1,0 +1,41 @@
+.card {
+        margin: 5% 30% 30%;
+        background-color: #3383e8;
+        height: 100% !important;
+        /*width: 70% !important;*/
+}
+
+img {
+    height: 30% !important;
+    width: 40% !important;
+}
+
+body {
+    text-align: center;
+    min-height: 100%;
+}
+form {
+    margin-top: 2em;
+    display: inline-block;
+    font-size: 20px;
+    width: 70%;
+}
+
+input {
+    width: 100%;
+}
+
+button {
+    margin-bottom: 2em;
+    margin-top: 2em;
+    font-size: 20px;
+}
+
+h1 {
+    padding-top: 1em;
+}
+
+
+* {
+    font-family: monospace;
+}
