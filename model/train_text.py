@@ -10,6 +10,7 @@ import os
 from utils import *
 
 DATA_DIR = './data/'
+# Can be any other LLM
 tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
 
 class ImgsDataset(Dataset):
