@@ -30,6 +30,8 @@ def download_ads(url: str, output_destination='out', cookies_location='cookies',
         "prefs", {"profile.default_content_setting_values.notifications": 1}
     )
 
+    json_ads = []
+
     with webdriver.Chrome(options=options) as driver:
         driver.get(url)
         if verbose: print(driver.current_url)
@@ -68,3 +70,10 @@ def download_ads(url: str, output_destination='out', cookies_location='cookies',
                 EC.presence_of_element_located((By.ID, key)))
             hash_value = hash_encode(f'{driver.current_url}_{datetime.now()}')
             element.screenshot(path.join(output_destination, f'{hash_value}.png'))
+
+            json_dict = {"id": hash_value,
+                         "img_name": f'{hash_value}.png',
+                         "link": []}
+
+    with open(path.join(output_destination, "metadata.json"), "w") as file:
+        json.dump(json_ads, file)
