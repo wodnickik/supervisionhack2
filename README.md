@@ -16,3 +16,12 @@
 - train_res.py - skrypt fine-tune'ujący ResNet18 do klasyfikacji reklam na podstawie zdjęcia
 - train_text.py - skrypt fine-tune'ujący transformer do klasyfikacji reklam na podstawie tekstu występującego na zdjęciu
 - utils - plik z używanymi funkcjami do wyciągania tekstu ze zdjęcia oraz tworzący zmienne predykcyjne do modelu klasyfikującego reklamy na postawie linku
+
+### scraper
+- google_ads_downloader.py - definicja funkcji scrapującej google ads na różnych tronach internetowych
+- context_generator.py - proof of concept generatora kontekstów, zawarta tam funkcja implementuje podstawową funkcjonalnść generowania kontekstu ze słów kluczowych i przedstawia konkretne sposoby na dalszy rozwój
+
+### dodatkowe foldery
+- contexts - domyślne miejsce zapisywania generowanych kontekstów
+- cookies - domyślne źródło plików cookie pozwalających obejść pytanie o zaakceptowanie ciasteczek
+- out - domyślny folder do zapisywania danych generowanych przez scrappery
