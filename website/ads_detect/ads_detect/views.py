@@ -2,25 +2,31 @@ import sys
 import os
 from pathlib import Path
 
-# API_DIR = Path(__file__).resolve().parent
-# PROJ_DIR = Path(__file__).resolve().parent.parent.parent
-# sys.path.append(os.path.join(API_DIR, ""))
-# sys.path.append(os.path.join(PROJ_DIR, ""))
+API_DIR = Path(__file__).resolve().parent
+PROJ_DIR = Path(__file__).resolve().parent.parent.parent.parent
+sys.path.append(os.path.join(API_DIR, ""))
+sys.path.append(os.path.join(PROJ_DIR, ""))
 
-from django.http import JsonResponse, HttpResponseRedirect
 from rest_framework.decorators import api_view
 from .serializers import InputSiteSerializer, CheckedSiteSerializer, UserSerializer, GroupSerializer
 from rest_framework.response import Response
-from rest_framework import status, viewsets
+from rest_framework import status
 from .models import InputSite, CheckedSite
 from django.shortcuts import render
 from .forms import InputSiteForm
 from rest_framework.request import Request
-from django.http import HttpRequest
 from rest_framework.test import APIRequestFactory
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework import permissions
+from scraper import google_ads_downloader
+from model import model
+import ads_predictions
+# from settings import  PROJ_DIR
+
+# from supervisionhack2 import google_ads_downloader
+
+data_out_path = os.path.join(API_DIR, "static", "fetched_data")
 
 
 def index(request):
@@ -28,16 +34,20 @@ def index(request):
         form = InputSiteForm(request.POST)
         if form.is_valid():
             url = form.cleaned_data['url']
+            keywords = form.cleaned_data['query']
             new_site = InputSite(url=url)
             new_site.save()
+            google_ads_downloader.download_ads(url, data_out_path
+                                               ,os.path.join(PROJ_DIR, "cookies"))
+
             try:
-                phish_result = 69
+                ads, context = ads_predictions()
             except Exception as e:
                 return render(request, 'home.html', {'form': InputSiteForm(), 'error': True})
 
-            # result_obj = CheckedSite(domain=url, phishing_estimate=phish_result)
-            # result_obj.save()
-            result_html = {'phish_estimate': round(phish_result * 100), 'domain': url}
+            result_obj = CheckedSite(url=url, user_agent=new_site.user_agent, context=context,
+                                     ads=ads)
+            result_html = {'url': url, 'context': context, "user_agent":new_site.user_agent, "ads":ads}
             return render(request, 'home.html', {'form': InputSiteForm(), 'submitted': True, "results": result_html})
     else:
         form = InputSiteForm()

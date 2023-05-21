@@ -6,8 +6,14 @@ import numpy as np
 from PIL import Image
 from typing import Optional, Tuple
 from model.utils import get_img_text, get_link_features
+from pathlib import Path
+import os
+
+
+PROJ_DIR = Path(__file__).resolve().parent
 
 device = torch.device("cpu")
+
 
 class NeuralNetLinks(nn.Module):
     """
@@ -31,11 +37,13 @@ class NeuralNetLinks(nn.Module):
         out = self.linear4(out)
         return out
 
+
+print(PROJ_DIR)
 # text model
-text_model = pipeline("sentiment-analysis", model="model/model_text/model_text")
+text_model = pipeline("sentiment-analysis", model=os.path.join(PROJ_DIR, 'model_text', 'model_text')).to(device)
 
 # resnet model
-resnet_model = torch.load('model/model_res/model_res.pt').to(device)
+resnet_model = torch.load(os.path.join(PROJ_DIR, 'model_res', 'model_res.pt')).to(device)
 resnet_model.eval()
 
 # link model
