@@ -40,7 +40,7 @@ class NeuralNetLinks(nn.Module):
 
 print(PROJ_DIR)
 # text model
-text_model = pipeline("sentiment-analysis", model=os.path.join(PROJ_DIR, 'model_text', 'model_text')).to(device)
+text_model = pipeline("sentiment-analysis", model=os.path.join(PROJ_DIR, 'model_text', 'model_text'))
 
 # resnet model
 resnet_model = torch.load(os.path.join(PROJ_DIR, 'model_res', 'model_res.pt')).to(device)
@@ -48,7 +48,7 @@ resnet_model.eval()
 
 # link model
 link_model = NeuralNetLinks(9, 100, 2).to(device)
-link_model.load_state_dict(torch.load('model/model_link/model_link.pt'))
+link_model.load_state_dict(torch.load(os.path.join(PROJ_DIR, 'model_link', 'model_link.pt')))
 link_model.eval()
 
 mean = np.array([0.5, 0.5, 0.5])

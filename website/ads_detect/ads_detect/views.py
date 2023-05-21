@@ -2,7 +2,7 @@ import sys
 import os
 from pathlib import Path
 
-API_DIR = Path(__file__).resolve().parent
+API_DIR = Path(__file__).resolve().parent.parent
 PROJ_DIR = Path(__file__).resolve().parent.parent.parent.parent
 sys.path.append(os.path.join(API_DIR, ""))
 sys.path.append(os.path.join(PROJ_DIR, ""))
@@ -21,7 +21,7 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from scraper import google_ads_downloader
 from model import model
-import ads_predictions
+from ads_predictions import get_ads_predictions
 # from settings import  PROJ_DIR
 
 # from supervisionhack2 import google_ads_downloader
@@ -39,11 +39,11 @@ def index(request):
             new_site.save()
             google_ads_downloader.download_ads(url, data_out_path
                                                ,os.path.join(PROJ_DIR, "cookies"))
-
-            try:
-                ads, context = ads_predictions()
-            except Exception as e:
-                return render(request, 'home.html', {'form': InputSiteForm(), 'error': True})
+            context = Path(os.path.join(data_out_path, "cookies.json")).read_text()
+            # try:
+            ads = get_ads_predictions()
+            # except Exception as e:
+            #     return render(request, 'home.html', {'form': InputSiteForm(), 'error': True})
 
             result_obj = CheckedSite(url=url, user_agent=new_site.user_agent, context=context,
                                      ads=ads)
@@ -62,10 +62,11 @@ def ad_detect_api(request):
             input_site_obj = serializer.save()
             url = input_site_obj.url
             try:
-                ads, context = 69, 69
+                ads = get_ads_predictions()
             except Exception as e:
                 return Response({"error": "0"}, status=status.HTTP_400_BAD_REQUEST)
 
+            context = Path(os.path.join(data_out_path, "cookies.json")).read_text()
             result_obj = CheckedSite(url=url, user_agent=input_site_obj.user_agent, context=context,
                                      ads=ads)
             result_obj.save()

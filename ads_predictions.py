@@ -4,20 +4,27 @@ from thefuzz import fuzz
 import json
 import os
 from typing import List, Optional
+import sys
+import os
+from pathlib import Path
+
+API_DIR = Path(__file__).resolve().parent
+print(API_DIR)
+data_out_path = os.path.join(API_DIR, "website", "ads_detect", "static", "fetched_data")
 
 def get_ads_predictions(keywords: Optional[List[str]] = None) -> List:
 
-    BUFFOR_DIR = 'out/'
+    BUFFOR_DIR = data_out_path
     files_imgs = os.listdir(BUFFOR_DIR)
     meta_path = files_imgs.pop(files_imgs.index('metadata.json'))
-    meta_data = json.load(open(BUFFOR_DIR + meta_path, 'r'))
+    meta_data = json.load(open(os.path.join(BUFFOR_DIR, meta_path), 'r'))
 
     ads_list = []
     for ad in meta_data:
         id = ad['id']
         img_name = ad.get('img_name', None)
         if img_name is not None:
-            words = get_img_text(BUFFOR_DIR + img_name)
+            words = get_img_text(os.path.join(BUFFOR_DIR, img_name))
             if keywords:
                 is_ok = True
                 for keyword in keywords:
@@ -28,7 +35,7 @@ def get_ads_predictions(keywords: Optional[List[str]] = None) -> List:
                     continue
         link = ad.get('link', None)
         post_text = ad.get('post_text', None)
-        prediction, confidence = predict(BUFFOR_DIR + img_name, link, post_text)
+        prediction, confidence = predict(os.path.join(BUFFOR_DIR, img_name), link, post_text)
         ads = {
             'name': id,
             'prediction': prediction,

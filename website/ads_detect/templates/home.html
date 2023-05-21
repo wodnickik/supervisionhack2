@@ -29,7 +29,7 @@
                     {% if submitted == True %}
                     <p>Thank you for submitting a site!</p>
                     <div>Results for domain {{ results.domain }}:</div>
-                    <div>There is a {{ results.phish_estimate }}% chance that it's a phish.</div>
+                    <div>List of found ads: {{ results.ads }}</div>
                     {% endif %}
                     <button type="submit" class="btn btn-secondary mt-4">Submit</button>
 
