@@ -47,6 +47,7 @@ def index(request):
 
             result_obj = CheckedSite(url=url, user_agent=new_site.user_agent, context=context,
                                      ads=ads)
+            result_obj.save()
             result_html = {'url': url, 'context': context, "user_agent":new_site.user_agent, "ads":ads}
             return render(request, 'home.html', {'form': InputSiteForm(), 'submitted': True, "results": result_html})
     else:
