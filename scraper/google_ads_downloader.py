@@ -84,5 +84,8 @@ def download_ads(url: str, output_destination='out', cookies_location='cookies',
                          "link": ad_url}
             json_ads.append(json_dict)
 
+        with open(path.join(output_destination, "cookies.json"), "w") as file:
+            json.dump(driver.get_cookies(), file)
+
     with open(path.join(output_destination, "metadata.json"), "w") as file:
         json.dump(json_ads, file)
