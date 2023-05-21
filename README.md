@@ -2,8 +2,7 @@
 
 ### model
 - data - folder zawierający dane, używane do trenowania modeli
-  - imgs - podane przykłady oszukańczych reklam i przykładowe prawdziwe reklamy
-  - imgs_cropped - j.w. z wyciętymi obrazami z podanych przykładów oszukańczych reklam
+  - imgs_cropped - podane przykłady oszukańczych reklam z wyciętymi obrazami oraz przykładowe prawdziwe reklamy
   - imgs4training - dane przygotowane do fine-tune'owania sieci resnet do klasyfikacji oszukańczych reklam
   - \*.csv - pliki csv zawierające niezbędne dane do trenowania modeli. W tym dane treningowe i testowe do modelu sieci neuronowej MLP do klasyfikacji reklam na podstawie linków i modelu LLM fine-tune'owanego do klasyfikacji reklam na podstawie tekstu, w nich występującego.
 - model_link - folder zawierający wytrenowany model MLP do klasyfikacji reklam na podstawie linków
