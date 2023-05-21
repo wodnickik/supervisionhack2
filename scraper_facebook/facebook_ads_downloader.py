@@ -13,11 +13,18 @@ import json
 from webdriver_manager.chrome import ChromeDriverManager
 
 def save_data(df, parent_dict):
+    """Saves images of facebook posts from df into png files
+    and save posts links and text into json
+
+    Args:
+        df (pandas.DataFrame): data about facebook post
+        parent_dict (str): perent dictionary in which files will be saved
+    """
     posts_json = []
     for i in range(df.shape[0]):
         post = df.iloc[i,:]
         post_id = post.loc["post_id"]
-        img_name = post_id + ".jpg"
+        img_name = post_id + ".png"
         link = post.loc["link"]
         parsed_uri = urllib.request.urlparse(link)
         link = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
@@ -44,6 +51,14 @@ def save_data(df, parent_dict):
 
 
 def check_facebook_url(url):
+    """Check if given url is proper
+
+    Args:
+        url (str): url
+
+    Returns:
+        str: post, group or user id/name
+    """
     parsed_uri = urllib.request.urlparse(url)
     domain = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
     after_domain = url.replace(domain, '').rsplit('/')
@@ -60,32 +75,26 @@ def check_facebook_url(url):
         return None
 
 
-def scrape_facebook(page_name, cookies, posts_limit=30):
+def scrape_facebook(url, cookies, posts_limit=30):
+    """scrape facebook posts from given url and checks if they are adds
 
+    Args:
+        url (str): url to facebook posts
+        cookies (str): path to cookie file
+        posts_limit (int, optional): Maximum number of scraped posts. Defaults to 30.
+
+    Returns:
+        pandas.DataFrame: data frame with information about posts that are ads
+    """
     posts_df = pd.DataFrame(columns = [])
     url_start = "https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=PL&view_all_page_id="
     url_end = "&search_type=page&media_type=all"
     browser = webdriver.Chrome(ChromeDriverManager().install())
     i = 0
+    link = check_facebook_url(url)
+    if link == None:
+        return
     while True:
-        # flag = False
-        # try:
-        #     print("1")
-        #     gen = fs.get_posts(post_urls=[page_name], timeout=240, extra_info=False, cookies=cookies, options={"comments": False, "posts_per_page": 4})
-        # except:
-        #     print("2")
-        #     flag = True
-        link = check_facebook_url(page_name)
-        # if flag and link != None:
-        #     try:
-        #         print("3")
-        #         print(link)
-        #         gen = fs.get_posts(link, timeout=240, extra_info=False, cookies='cookies.txt', options={"comments": False, "posts_per_page": 4})
-        #     except:
-        #         print("4")
-        #         return None
-        # else:
-        #     return None
         for post in fs.get_posts(link, timeout=240, extra_info=False, cookies=cookies, options={"comments": False, "posts_per_page": 4}):
             if i == posts_limit:
                 return posts_df
