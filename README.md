@@ -30,6 +30,6 @@
 - out - domyślny folder do zapisywania danych generowanych przez scrapery
 
 ## additional resources
-- [dokłądny opis rozwiązania](https://docs.google.com/document/d/1hgswUGwWvL0UOdvEzNAXys6WnAkctzCMzsYkIpZYoNw/edit?usp=sharing)
+- [dokładny opis rozwiązania](https://docs.google.com/document/d/1hgswUGwWvL0UOdvEzNAXys6WnAkctzCMzsYkIpZYoNw/edit?usp=sharing)
 - [prezentacja](https://docs.google.com/presentation/d/1-aE9_-ChqbvelpSjYNWnZRLZexz0tYKmPQzA3XEJ9ZY/edit?usp=sharing)
 - [demo](https://youtu.be/nK5qRgMl_a4)
