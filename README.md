@@ -28,3 +28,8 @@
 - contexts - domyślne miejsce zapisywania generowanych kontekstów
 - cookies - domyślne źródło plików cookie pozwalających obejść pytanie o zaakceptowanie ciasteczek
 - out - domyślny folder do zapisywania danych generowanych przez scrapery
+
+## additional resources
+- (https://docs.google.com/document/d/1hgswUGwWvL0UOdvEzNAXys6WnAkctzCMzsYkIpZYoNw/edit?usp=sharing)[dokłądny opis rozwiązania]
+- (https://docs.google.com/presentation/d/1-aE9_-ChqbvelpSjYNWnZRLZexz0tYKmPQzA3XEJ9ZY/edit?usp=sharing)[prezentacja]
+- (https://youtu.be/nK5qRgMl_a4)[demo]
