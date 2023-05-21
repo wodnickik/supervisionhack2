@@ -10,7 +10,7 @@
 - model_res - folder zawierający fine-tune'owaną sieć ResNet18 do klasyfikacji reklam na podstawie zdjęcia
 - model_text - folder zawierający fine-tune'owany transformer do klasyfikacji reklam na podstawie tekstu występującego na zdjęciu
 - extract_text.py - skrypt pythonowy wyodrębniający tekst z obrazka
-- model.py - skrypt pythonowy tworzący ostatyczne predykcje za pomocą ensembling'u trzech modeli klasyfikacyjnych przy pomocy soft vote'a.
+- model.py - skrypt pythonowy tworzący ostatyczne predykcje za pomocą ensembling'u trzech modeli klasyfikacyjnych przy pomocy ich głosowania.
 - process_data.ipynb - notatnik do przetwarzania danych treningowych/testowych
 - process_data_for_links.ipynb - notatnik do przetwarzania danych treningowych/testowych
 - train_link.py - skrypt uczący model MLP do klasyfikacji reklam na podstawie linków
