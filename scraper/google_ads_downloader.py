@@ -33,11 +33,16 @@ def download_ads(url: str, output_destination='out', cookies_location='cookies',
     json_ads = []
 
     with webdriver.Chrome(options=options) as driver:
+
+
         driver.get(url)
         if verbose: print(driver.current_url)
         domain = urlparse(driver.current_url).netloc
         cookies = json.loads(Path(path.join(cookies_location, f'{domain}_cookies.json')).read_text())
 
+
+        # analogicznie do wczyatania cookies do obejścia klikania zgody na cookies
+        # można wczytać dowolny kontekst z plików cookies
         for cookie in cookies:
             if 'sameSite' in cookie:
                 cookie['sameSite'] = 'Strict'
