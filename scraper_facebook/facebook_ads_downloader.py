@@ -80,7 +80,7 @@ def scrape_facebook(url, cookies, posts_limit=30):
 
     Args:
         url (str): url to facebook posts
-        cookies (str): path to cookie file
+        cookies (str): path to cookie file which allows to provide credentials
         posts_limit (int, optional): Maximum number of scraped posts. Defaults to 30.
 
     Returns:
