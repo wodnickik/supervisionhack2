@@ -1,3 +1,6 @@
+import json
+from urllib.parse import urlparse
+
 from selenium import webdriver
 from selenium.webdriver import ActionChains
 from selenium.webdriver.chrome.options import Options
@@ -9,11 +12,21 @@ from selenium.common.exceptions import StaleElementReferenceException
 from datetime import datetime
 import time
 from os import path
+from pathlib import Path
 import re
+import hashlib
+
+
+def hash_encode(s):
+    return hashlib.md5(s.encode()).hexdigest()
 
 
 images_path = 'img'
-url = 'https://www.onet.pl/'
+urls = ['https://www.onet.pl/',
+        'https://www.wp.pl/',
+        'https://www.gazeta.pl/0,0.html',
+        'https://wykop.pl/',
+        'https://www.interia.pl/']
 headers = {
     'Refer': 'https://www.google.com/',
     'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/113.0'
@@ -28,33 +41,43 @@ options.add_experimental_option(
     "prefs", {"profile.default_content_setting_values.notifications": 1}
 )
 with webdriver.Chrome(options=options) as driver:
-    driver.get(url)
+    for url in urls:
+        driver.get(url)
+        print(driver.current_url)
+        domain = urlparse(driver.current_url).netloc
+        cookies = json.loads(Path(f'{domain}_cookies.json').read_text())
 
-    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, 'cmp-intro_acceptAll'))).click()
+        for cookie in cookies:
+            if 'sameSite' in cookie:
+                cookie['sameSite'] = 'Strict'
+            driver.add_cookie(cookie)
 
-    pattern = re.compile("^google_ads_iframe.*")
+        driver.get(url)
 
-    elements = []
-    for i in range(2):
-        time.sleep(2)
-        elements.extend(driver.find_elements(By.TAG_NAME, 'iframe'))
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    print(len(elements))
-    elements = [_ for _ in elements if pattern.match(_.get_attribute('id'))]
-    tmp = dict()
-    for element in elements:
-        tmp[element.get_attribute('id')] = element
-    elements = tmp
-    print(len(elements))
+        pattern = re.compile("^google_ads_iframe.*")
 
-    for key in elements:
-        element = elements[key]
-        print(key)
-        ActionChains(driver).move_to_element(element).perform()
-        # driver.execute_script("arguments[0].scrollIntoView();", element)
-        time.sleep(1)
+        elements = []
+        for i in range(2):
+            time.sleep(2)
+            elements.extend(driver.find_elements(By.TAG_NAME, 'iframe'))
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        elements = [_ for _ in elements if pattern.match(_.get_attribute('id'))]
 
-        WebDriverWait(driver, 10, ignored_exceptions=StaleElementReferenceException).until(EC.presence_of_element_located((By.ID, key)))
-        element.screenshot(path.join(images_path, f'screenshot_{datetime.now()}.png'))
+        tmp = dict()
+        for element in elements:
+            tmp[element.get_attribute('id')] = element
+        elements = tmp
+        print(len(elements))
 
-    time.sleep(5)
+        for key in elements:
+            element = elements[key]
+            ActionChains(driver).move_to_element(element).perform()
+            # driver.execute_script("arguments[0].scrollIntoView();", element)
+            time.sleep(1)
+
+            WebDriverWait(driver, 10, ignored_exceptions=StaleElementReferenceException).until(
+                EC.presence_of_element_located((By.ID, key)))
+            hash_value = hash_encode(f'{driver.current_url}_{datetime.now()}')
+            element.screenshot(path.join(images_path, f'{hash_value}.png'))
+
+        time.sleep(5)
