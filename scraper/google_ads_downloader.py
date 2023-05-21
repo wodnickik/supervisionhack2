@@ -71,9 +71,18 @@ def download_ads(url: str, output_destination='out', cookies_location='cookies',
             hash_value = hash_encode(f'{driver.current_url}_{datetime.now()}')
             element.screenshot(path.join(output_destination, f'{hash_value}.png'))
 
+            ActionChains(driver).click(element).perform()
+            parent = driver.window_handles[0]
+            child = driver.window_handles[-1]
+            driver.switch_to.window(child)
+            ad_url = driver.current_url
+            driver.close()
+            driver.switch_to.window(parent)
+
             json_dict = {"id": hash_value,
                          "img_name": f'{hash_value}.png',
-                         "link": []}
+                         "link": ad_url}
+            json_ads.append(json_dict)
 
     with open(path.join(output_destination, "metadata.json"), "w") as file:
         json.dump(json_ads, file)
